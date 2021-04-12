@@ -1,0 +1,22 @@
+body{
+    margin: 0;
+}
+
+main {
+    display: grid;
+    grid-template-rows: repeat (3, 25% 1fr);
+    grid-template-columns: repeat (3, 1fr);
+}
+
+nav {
+    grid-row: 1/1;
+}
+
+.photographer__link {
+    grid-row: 2/2;
+}
+
+.photographer {
+    width: 5em;
+    border-radius: 100%;
+}
