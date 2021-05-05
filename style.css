@@ -1,22 +1,119 @@
-body{
+/*-----------------------------------------------------------------------*/
+/*------------------------MOBILE VERSION---------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+*{
     margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: "DM Sans", arial, sans-serif;
+    font-weight: 500;
 }
 
-main {
-    display: grid;
-    grid-template-rows: repeat (3, 25% 1fr);
-    grid-template-columns: repeat (3, 1fr);
+a {
+    text-decoration: none;
 }
 
-nav {
-    grid-row: 1/1;
+#header__index {
+    display: flex;
+    margin-top: 1em;
+}
+
+#logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+#logo__img {
+    padding: 1em;
+    width: 150px;
+}
+
+#header__title {
+    display: flex;
+    width: 50%;
+    color: #901C1C;
+    align-items: center;
+    justify-content: center;
+}
+
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1em;
+}
+
+.filter {
+    border: 1px solid grey;
+    border-radius: 1em;
+    color: #901C1C;
+    padding: 0.3em;
+    margin: 0.2em;
+}
+
+#index__page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .photographer__link {
-    grid-row: 2/2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.photographer {
-    width: 5em;
-    border-radius: 100%;
+.photographer__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+.photographer__portrait {
+    object-fit: cover;
+    width: 250px;
+    height: 250px;
+    border-radius: 100%;
+    margin-bottom: 1em;
+}
+
+.photographer__name {
+    font-size: 2.5em;
+    color: #D3573C;
+}
+
+.photographer__city{
+    font-weight: 500;
+    color: #901C1C;
+    margin: 0.3em;
+}
+
+.photographer__tagline {
+    font-size: 0.8em;
+    margin-bottom: 0.4em;
+}
+
+.photographer__price {
+    font-size: 0.7em;
+    color: #757575;
+}
+
+#photographer__tags {
+    margin: 1em 0 3em 0;
+}
+
+#photographer__page {
+    display: flex;
+    flex-direction: column;
+}
+
+.photographer__image {
+    object-fit: cover;
+    height: 300px;
+    margin: 2em;
+    border-radius: 0.5em;
+}
+

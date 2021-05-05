@@ -1,56 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');</style>
+        <link rel="stylesheet" href="style.css" />
+    </head>
 
-<body>
-    <header>
-        <a href="">
-            <img src="Images/fisheye-logo.png" alt="logo fisheye" />
-        </a>
-        <nav aria-label="photographer categories">
-            <a href="">#Portrait</a>
-            <a href="">#Art</a>
-            <a href="">#Fashion</a>
-            <a href="">#Architecture</a>
-            <a href="">#Travel</a>
-            <a href="">#Sport</a>
-            <a href="">#Animals</a>
-            <a href="">#Events</a>
-        </nav>
-    </header>
-
-    <main>
+    <body>
         <header>
-            <h1>Nos photographes</h1>
+            <div id="header__index">
+                <a id="logo" href="index.html">
+                    <img id="logo__img" src="Images/fisheye-logo.png" title="Logo de FishEye" alt="logo fisheye" />
+                </a>
+                <h1 id="header__title">Nos photographes</h1>
+            </div>
+            <nav id="filters" aria-label="photographer categories">
+                <a class="filter" href="">#Portrait</a>
+                <a class="filter" href="">#Art</a>
+                <a class="filter" href="">#Fashion</a>
+                <a class="filter" href="">#Architecture</a>
+                <a class="filter" href="">#Travel</a>
+                <a class="filter" href="">#Sport</a>
+                <a class="filter" href="">#Animals</a>
+                <a class="filter" href="">#Events</a>
+            </nav>
         </header>
-        
-        <section id="photographers__page">
-            <a href="">
-                <div class="photographer__link">
-                    <img class="photographer" src="Images/Mimi/Portrait_Nora.jpg" />
-                    <h2>Mimi Keel</h2>
-                </div>
-            </a>
 
-            <a href="">
-                <div class="photographer__link">
-                    <img class="photographer" src="Images/Mimi/Portrait_Nora.jpg" />
-                    <h2>Mimi Keel</h2>
-                </div>
-            </a>
+        <main>
+            <section id="index__page">
+            </section>
 
-            <a href="">
-                <div class="photographer__link">
-                    <img class="photographer" src="Images/Mimi/Portrait_Nora.jpg" />
-                    <h2>Mimi Keel</h2>
-                </div>
-            </a>
-        </section>
-    </main>
-</body>
+            <section id="photographer__page">
+            </section>
+        </main>
+        <script src="json.js"></script>
+        <script src="index.js"></script>
+        <script src="photographer-page.js"></script>
+    </body>
 </html>
