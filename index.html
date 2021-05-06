@@ -5,38 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');</style>
+        <script src="https://kit.fontawesome.com/8dfaf1b5df.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="style.css" />
     </head>
 
     <body>
-        <header>
-            <div id="header__index">
-                <a id="logo" href="index.html">
-                    <img id="logo__img" src="Images/fisheye-logo.png" title="Logo de FishEye" alt="logo fisheye" />
-                </a>
-                <h1 id="header__title">Nos photographes</h1>
-            </div>
-            <nav id="filters" aria-label="photographer categories">
-                <a class="filter" href="">#Portrait</a>
-                <a class="filter" href="">#Art</a>
-                <a class="filter" href="">#Fashion</a>
-                <a class="filter" href="">#Architecture</a>
-                <a class="filter" href="">#Travel</a>
-                <a class="filter" href="">#Sport</a>
-                <a class="filter" href="">#Animals</a>
-                <a class="filter" href="">#Events</a>
-            </nav>
-        </header>
-
         <main>
-            <section id="index__page">
-            </section>
-
-            <section id="photographer__page">
+            <section id="container">
             </section>
         </main>
         <script src="json.js"></script>
-        <script src="index.js"></script>
-        <script src="photographer-page.js"></script>
+        <script src="model.js"></script>
+        <script src="Views/abstractView.js"></script>
+        <script src="Views/viewMainPage.js"></script>
+        <script src="Views/viewPhotographerPage.js"></script>
+        <script src="Views/viewModal.js"></script>
+        <script src="Views/viewLightbox.js"></script>
+        <script src="controller.js"></script>
+        <script src="router.js"></script>
     </body>
 </html>
