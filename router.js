@@ -8,18 +8,14 @@ function goToRoute(page, ...arguments) {
             break;
 
         case "photographerPage":
-            let id = arguments[0]
-            controller.renderPhotographerPage(id)
+            let photographerId = arguments[0]
+            controller.renderPhotographerPage(photographerId)
             break;
 
         case "modalPage":
             controller.renderModal()
             break;
         
-        case "lightboxPage":
-            controller.renderLightbox()
-            break;
-
         default : 
         //controller.renderErrorPage
     }

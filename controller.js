@@ -2,23 +2,18 @@ class Controller {
 
     renderMainPage() {
         let view = new ViewMainPage();
-        view.renderPhotographersList(Model.getPhotographe());
+        view.renderPhotographersList(Model.getPhotographer());
     }
 
     renderPhotographerPage(id) {
-        console.log(id);
         let view = new ViewPhotographerPage();
-        let photographe = Model.getPhotographeById(id);
-        view.renderPhotographerPage(photographe, Model.getMedia());
+        let photographer = Model.getPhotographerPageById(id);
+        let listMedia = Model.getAllMediaByPhotographerId(id);
+        view.renderPhotographerPage(photographer, listMedia);
     }
 
     renderModal() {
         let view = new ViewModal();
-        view.renderModal(Model.getPhotographe());
-    }
-
-    renderLightbox() {
-        let view = new ViewLightbox();
-        view.renderLightbox(Model.getPhotographe(), Model.getMedia());
+        view.renderModal(Model.getPhotographer());
     }
 }

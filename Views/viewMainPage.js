@@ -23,7 +23,7 @@ class ViewMainPage extends AbstractView {
         `;
 
         for(let i = 0; i < listPhotographer.length; i++) {
-            content += this.renderDetailPhotographer(listPhotographer[i]) + this.renderTagsPhotographersList(listPhotographer[i]);
+            content += `<div id="photographer__profile">` + this.renderDetailPhotographer(listPhotographer[i]) + this.renderTagsPhotographersList(listPhotographer[i]) + `</div>`;
         }
 
         this.display(content);
@@ -31,7 +31,6 @@ class ViewMainPage extends AbstractView {
 
     renderTagsPhotographersList(listPhotographer) {
         let content = `<div id="photographer__tags">`;
-
         for(let i = 0; i < listPhotographer.tags.length; i++) {
             let tags = listPhotographer.tags;
             for(let tag of tags) {

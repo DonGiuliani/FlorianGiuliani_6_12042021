@@ -92,7 +92,7 @@ let jsonData = {
       {
         "id": 9275938,
         "photographerId": 82,
-        "image": "Event-_eddingGazebo.jpg",
+        "image": "Event_WeddingGazebo.jpg",
         "tags": ["events"],
         "likes": 69,
         "date": "2018-02-22",
@@ -192,7 +192,7 @@ let jsonData = {
       {
         "id": 725639493,
         "photographerId": 925,
-        "image": "Event_ProductPitchjpg",
+        "image": "Event_ProductPitch.jpg",
         "tags": ["events"],
         "likes": 3,
         "date": "2019-05-20",
@@ -224,25 +224,6 @@ let jsonData = {
         "likes": 52,
         "date": "2017-03-13",
         "price": 70
-      },
-      {
-        "id": 83958935,
-        "photographerId": 925,
-        "video": "Animals_Puppiness.mp4",
-        "tags": ["animals"],
-        "likes": 52,
-        "date": "2016-06-12",
-        "price": 70
-      },
-  
-      {
-        "id": 394583434,
-        "photographerId": 527,
-        "video": "Travel_Rock_Mountains.mp4",
-        "tags": ["travel"],
-        "likes": 23,
-        "date": "2017-03-18",
-        "price": 45
       },
       {
         "id": 343423425,
@@ -390,15 +371,6 @@ let jsonData = {
         "price": 45
       },
       {
-        "id": 5234343,
-        "photographerId": 243,
-        "video": "Animals_Wild_Horses_in_the_mountains.mp4",
-        "tags": ["animals"],
-        "likes": 142,
-        "date": "2019-08-23",
-        "price": 60
-      },
-      {
         "id": 95234343,
         "photographerId": 243,
         "image": "Animals_Rainbow.jpg",
@@ -479,15 +451,6 @@ let jsonData = {
         "likes": 88,
         "date": "2020-01-05",
         "price": 60
-      },
-      {
-        "id": 9259398453,
-        "photographerId": 195,
-        "video": "Architecture_coverr_circle_empty_highway_in_buenos_aires_587740985637.mp4",
-        "tags": ["architecture"],
-        "likes": 57,
-        "date": "2020-01-20",
-        "price": 65
       },
       {
         "id": 3523523534,

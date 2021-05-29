@@ -1,30 +1,43 @@
 class Model {
 
-    static getPhotographe() {
+    static getPhotographer() {
         return jsonData.photographers;
     }
 
-    static getPhotographeById(id) {
+    static getPhotographerPageById(id) {
         for(let i = 0; i < jsonData.photographers.length; i++) {
-            let photographeId = jsonData.photographers[i].id;
-            if(id == photographeId){
-                return jsonData.photographers[i]
-            }
-        } 
-        return null
-    }
-    
-    static isFruitDansPanier(fruit) {
-        let panier = ['pomme', 'poire', 'fraise', 'framboise'];
-        for(let i = 0; i < panier.length; i++) {
-            if(fruit == panier[i]) {
-                return true
+            let currentPhotographerId = jsonData.photographers[i].id;
+            if(id == currentPhotographerId) {
+                return jsonData.photographers[i];
             }
         }
-        return false
+        return null;
     }
 
-    static getMedia() {
+    static getAllMedia() {
         return jsonData.media;
+    }
+
+    static getAllMediaByPhotographerId(id) {
+        let arrayMedia = [];
+        for(let i = 0; i < jsonData.media.length; i++) {
+            let currentMedia = jsonData.media[i];
+            if(id == currentMedia.photographerId) {
+                arrayMedia.push(currentMedia);
+            }
+        }
+        return arrayMedia;
+    }
+
+    static getOneMediaById(mediaId) {
+        console.log(mediaId);
+        for(let i = 0; i < jsonData.media.length; i++) {
+            let currentMediaId = jsonData.media[i].id;
+            if(mediaId == currentMediaId) {
+                console.log(jsonData.media[i].id);
+
+            }
+
+        }
     }
 }
