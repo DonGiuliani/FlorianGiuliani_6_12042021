@@ -6,6 +6,7 @@ class ViewPhotographerPage extends AbstractView {
         let content = ``;
         
         content += this.renderSlider(photographer, listMedia);
+        content += this.renderModal(photographer)
 
         content += `
         <div id="header__section">
@@ -13,7 +14,7 @@ class ViewPhotographerPage extends AbstractView {
                 <img id="logo__img" src="Images/fisheye-logo.png" title="Logo de FishEye" alt="logo fisheye" onclick="goToRoute('viewMainPage')"/>
             </a>
         </div>
-        <button class="button__contact" onclick="goToRoute('modalPage')">Contactez-moi</button>
+        <button class="button" id="button__contact">Contactez-moi</button>
         `;
 
       
@@ -22,7 +23,10 @@ class ViewPhotographerPage extends AbstractView {
         content += this.renderPhotographerImages(photographer, listMedia);
 
         this.display(content);
+        this.initSorting(photographer, listMedia);
         this.addSliderOnImage(listMedia);
+        this.addModalOnImage();
+        this.addEventListenerOnLikeButton(listMedia);
     }
     
     renderDetailPhotographerPage(currentPhotographer) {
@@ -54,20 +58,31 @@ class ViewPhotographerPage extends AbstractView {
     }
 
     renderPhotographerImages(currentPhotographer, listMedia) {
-
         let content = `
         <div id="photographer__pictures__bloc">
-        <nav class="sort">Trier par 
-            <ul>
-                <li class="sorting sort__popularity">Popularité
-                    <ul class="deroulement">
-                        <li class="sort__date">Date</li>
-                        <li class="sort__title">Titre</li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-        `;
+            <nav class="sort">Trier par 
+                <ul>
+                    <li class="sorting roll">
+                        <span id="label__tri">Popularité</span>
+                        <ul class="deroulement">
+                            <li class="sorting roll" id="sort__popularity">Popularité
+                            <li class="sorting roll" id="sort__date">Date</li>
+                            <li class="sorting roll" id="sort__title">Titre</li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            `
+            /*`
+        <div id="photographer__pictures__bloc">
+            <nav class="sort">Trier par
+                <ul>
+                    <li class="sorting roll" id="sort__popularity">Popularité
+                    <li class="sorting roll" id="sort__date">Date</li>
+                    <li class="sorting roll" id="sort__title">Titre</li>
+                </ul>
+            </nav>
+            `*/;
 
         for(let i = 0; i < listMedia.length; i++) {
             if(listMedia[i].image !== undefined) {
@@ -77,8 +92,8 @@ class ViewPhotographerPage extends AbstractView {
                     <img class="photographer__picture" id="image__${listMedia[i].id}" src="Images/${currentPhotographer.name}/${listMedia[i].image}" aria-label="image closeup view">
                     <div class="picture__details">
                         <p class="picture__title">${titleImage}</p>
-                        <p class="picture__likes" aria-label="likes">${listMedia[i].likes}
-                            <i class="fas fa-heart"></i>
+                        <p class="picture__likes" aria-label="likes" id="like__number__image__${listMedia[i].id}">${listMedia[i].likes}
+                            <i class="fas fa-heart" id="like__image__${listMedia[i].id}"></i>
                         </p>
                     </div>
                 </div>`
@@ -87,20 +102,34 @@ class ViewPhotographerPage extends AbstractView {
 
                 content += `
                 <div class="photo">
-                    <video controls class="photographer__picture" onclick="goToRoute('lightboxPage')" aria-label="image closeup view">
+                    <video controls class="photographer__picture" aria-label="image closeup view">
                         <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
                     </video>
                     <div class="picture__details">
                         <p class="picture__title">${titleVideo}</p>
-                        <p class="picture__likes" aria-label="likes">${listMedia[i].likes}
-                            <i class="fas fa-heart"></i>
+                        <p class="picture__likes" aria-label="likes" id="like__number__image__${listMedia[i].id}">${listMedia[i].likes}
+                            <i class="fas fa-heart" id="like__image__${listMedia[i].id}"></i>
                         </p>
                     </div>
                  </div>`
             }
         }
-        content += `</div>`
+        content += ` </div>`
         return content
+    }
+
+    addEventListenerOnLikeButton(listMedia) {
+        for(let i = 0; i < listMedia.length; i++) {
+
+            let likeButton = document.getElementById(`like__image__${listMedia[i].id}`);
+            let likeNumber = document.getElementById(`like__number__image__${listMedia[i].id}`);
+            likeButton.addEventListener("click", function(event) {
+                console.log(event.target);
+                let likes = listMedia[i].likes;
+                likes++
+                likeNumber.innerHTML = likes + ` <i class="fas fa-heart"></i>`
+            })
+        }
     }
 
     addSliderOnImage(listMedia) {
@@ -112,28 +141,26 @@ class ViewPhotographerPage extends AbstractView {
         }
 
         // -- Close the slider --
-        let cross = document.getElementById("cross");
-        cross.addEventListener("click", this.closeSlider);
+        let crossSlider = document.getElementById("cross__slider");
+        // Fonction fléchée
+        crossSlider.addEventListener("click", () => this.closeSlider());
 
         // -- Show the next picture --
         let arrowRight = document.getElementById("arrow__right");
-        arrowRight.addEventListener("click", this.renderNextPicture);
+        arrowRight.addEventListener("click", () => this.renderNextPicture());
 
         // -- Show the previous picture --
         let arrowLeft = document.getElementById("arrow__left");
-        arrowLeft.addEventListener("click", this.renderPreviousPicture);
+        arrowLeft.addEventListener("click", () => this.renderPreviousPicture());
     }
 
     showSlider(indexImage, listMedia) {
-        console.log("Ca marche " + indexImage);
-        console.log(this.listMedia);
-
+        this.indexImage = indexImage;
         for(let i = 0; i < listMedia.length; i++) {
             let tagImage = document.getElementById(`image_slider__${listMedia[i].id}`);
             let slider = document.getElementById("slider");
 
             if(indexImage == i) {
-                console.log(i);
                 slider.style.display = "flex";
                 tagImage.classList.add("active");
             } else {
@@ -149,15 +176,23 @@ class ViewPhotographerPage extends AbstractView {
 
     renderSlider(currentPhotographer, listMedia) {
         let content = `<div id="slider">
-        <i class="fas fa-times" id="cross"></i>
+        <i class="fas fa-times" id="cross__slider"></i>
         <i class="fas fa-chevron-left" id="arrow__left"></i>
         `
 
         for(let i = 0; i < listMedia.length; i++) {
-            content += `
-            <img class="image__slider" id="image_slider__${listMedia[i].id}" src="images/${currentPhotographer.name}/${listMedia[i].image}">
-            `;
+            if(listMedia[i].image !== undefined) {
+                content += `
+                <img class="image__slider" id="image_slider__${listMedia[i].id}" src="images/${currentPhotographer.name}/${listMedia[i].image}">
+                `;
+            } else {
+                content += `
+                <video controls class="image__slider" id="image_slider__${listMedia[i].id}" aria-label="image closeup view">
+                <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
+                </video>
+                `
             }
+        }
 
         content += `
         <i class="fas fa-chevron-right" id="arrow__right"></i>
@@ -168,10 +203,182 @@ class ViewPhotographerPage extends AbstractView {
     }
 
     renderNextPicture() {
-        console.log("oui");
+        let tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
+        tagImage.classList.remove('active');
+
+        if(this.indexImage < this.listMedia.length - 1) {
+            this.indexImage++;
+        } else {
+            this.indexImage = 0;
+        }
+
+        tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
+        tagImage.classList.add('active');
     }
 
     renderPreviousPicture() {
-        console.log("non");
+        let tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
+        tagImage.classList.remove('active');
+
+        if(this.indexImage > 0) {
+            this.indexImage--;
+        } else {
+            this.indexImage = this.listMedia.length - 1;
+        }
+
+        tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
+        tagImage.classList.add('active');        
+    }
+
+    initSorting(photographer, listMedia) {
+        let sortButtonTitle = document.getElementById("sort__title");
+        sortButtonTitle.addEventListener("click", function() {
+            this.sortImagesByTitle(photographer, listMedia)
+        }.bind(this));
+
+        let sortButtonPopularity = document.getElementById("sort__popularity");
+        sortButtonPopularity.addEventListener("click", function() {
+            this.sortImagesByPopularity(photographer, listMedia)
+        }.bind(this));
+
+        let sortButtonDate = document.getElementById("sort__date");
+        sortButtonDate.addEventListener("click", function() {
+            this.sortImagesByDate(photographer, listMedia)
+        }.bind(this));
+    }
+
+    sortImagesByTitle(photographer, listMedia) {
+        let baliseListMedia = document.getElementById("photographer__pictures__bloc");
+
+        let content = ``;
+        let arrayMediaTitle = [];
+
+        for(let i = 0; i < listMedia.length; i++) {
+            let currentMedia = this.listMedia[i];
+            arrayMediaTitle.push(currentMedia);
+        }
+        arrayMediaTitle.sort(function (a, b) {
+            return a.image.localeCompare(b.image);
+        });
+
+        console.log(arrayMediaTitle);
+
+        content += this.renderPhotographerPage(photographer, arrayMediaTitle);
+        baliseListMedia.innerHTML = content;
+    }
+
+    sortImagesByPopularity(photographer, listMedia) {
+        let baliseListMedia = document.getElementById("photographer__pictures__bloc");
+
+        let content = ``;
+        let arrayMediaLikes = [];
+
+        for(let i = 0; i < listMedia.length; i++) {
+            let currentMedia = this.listMedia[i];
+            arrayMediaLikes.push(currentMedia);
+        }
+        arrayMediaLikes.sort(function (a, b) {
+            return b.likes - a.likes;
+        });
+
+
+        console.log(arrayMediaLikes);
+        content += this.renderPhotographerPage(photographer, arrayMediaLikes)
+        baliseListMedia.innerHTML = content;
+    }
+
+    sortImagesByDate(photographer, listMedia) {
+        let baliseListMedia = document.getElementById("photographer__pictures__bloc");
+
+        let content = ``;
+        let arrayMediaDate = [];
+
+        for(let i = 0; i < listMedia.length; i++) {
+            let currentMedia = this.listMedia[i];
+            arrayMediaDate.push(currentMedia);
+        }
+        arrayMediaDate.sort(function (a, b) {
+            return new Date(b.date) - new Date(a.date);
+        });
+
+        console.log(arrayMediaDate);
+        content += this.renderPhotographerPage(photographer, arrayMediaDate)
+        baliseListMedia.innerHTML = content;
+    }
+
+    addModalOnImage() {
+        let modalButton = document.getElementById("button__contact");
+        modalButton.addEventListener("click", () => this.showModal());
+
+        let crossModal = document.getElementById("cross__modal");
+        crossModal.addEventListener("click", this.closeModal);
+
+        let submitButton = document.getElementById("submit");
+        submitButton.addEventListener("click", this.sendInfoModal);
+    }
+
+    showModal() {
+        let modal = document.getElementById("modal__page");
+        modal.style.display = "flex";
+    }
+
+    closeModal() {
+        let modal = document.getElementById("modal__page");
+        modal.style.display = "none";
+    }
+
+    renderModal(currentPhotographer) {
+        let content = `
+        <div id="modal__page">
+            <div class="modal__header">
+
+                <h1 class="modal__title">
+                    Contactez-moi</br>
+                    ${currentPhotographer.name}
+                </h1>
+                <span class="button__close">
+                    <i class="fas fa-times" id="cross__modal"></i>
+                </span>
+            </div>
+
+            <form id="modal__form" method="GET">
+                <div class="modal__field">
+                    <label class="modal__label" for="firstName">Prénom</label>
+                    <input class="modal__input" id="firstName" type="text" />
+                </div>
+
+                <div class="modal__field">
+                    <label class="modal__label" for="lastName">Nom</label>
+                    <input class="modal__input" id="lastName" type="text" />
+                </div>
+                
+                <div class="modal__field">
+                    <label class="modal__label" for="email">Email</label>
+                    <input class="modal__input" id="email" type="email" />
+                </div>
+
+                <div class="modal__field">
+                    <label class="modal__label" for="message">Votre message</label>
+                    <input class="modal__input message" id="message" type="text"/>
+                </div>
+
+                <div class="modal__submit">
+                    <input class="button__submit" type="submit" id="submit" value="Envoyer">
+                </div>
+            </form>
+        </div>
+        `
+        return content;
+    }
+
+    sendInfoModal() {
+        let firstName = document.getElementById("firstName");
+        console.log("Prénom : '" + firstName.value + "'");
+
+        let lastName = document.getElementById("lastName");
+        console.log("Nom : '" + lastName.value + "'");
+
+        let email = document.getElementById("email");
+        console.log("Email : '" + email.value + "'");
     }
 }

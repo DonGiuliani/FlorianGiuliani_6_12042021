@@ -1,6 +1,8 @@
 class ViewMainPage extends AbstractView {
 
-    renderPhotographersList(listPhotographer) {
+    renderPhotographersList(listPhotographer, listTags) {
+        this.listPhotographer = listPhotographer;
+        this.listTags = listTags;
         let content = `
         <header>
             <div id="header__section">
@@ -9,24 +11,52 @@ class ViewMainPage extends AbstractView {
                 </a>
                 <h1 id="header__title">Nos photographes</h1>
             </div>
-            <nav id="filters" aria-label="photographer categories">
-                <a class="filter" href="">#Portrait</a>
-                <a class="filter" href="">#Art</a>
-                <a class="filter" href="">#Fashion</a>
-                <a class="filter" href="">#Architecture</a>
-                <a class="filter" href="">#Travel</a>
-                <a class="filter" href="">#Sport</a>
-                <a class="filter" href="">#Animals</a>
-                <a class="filter" href="">#Events</a>
+            <nav id="filters" aria-label="photographer categories">` 
+            + this.renderArrayTags(listTags) + `
             </nav>
-        </header>
-        `;
+        </header>`;
+
+        content += `<div id="list__photographers">`
 
         for(let i = 0; i < listPhotographer.length; i++) {
-            content += `<div id="photographer__profile">` + this.renderDetailPhotographer(listPhotographer[i]) + this.renderTagsPhotographersList(listPhotographer[i]) + `</div>`;
+            content += `<div id="photographer__profile">` + this.renderDetailPhotographer(listPhotographer[i]) + this.renderTagsPhotographersList(listPhotographer[i], listTags) + `</div>`;
         }
+        content += `</div>`
 
         this.display(content);
+        this.initClickOnTag(listTags);
+    }
+
+    renderArrayTags(listTags) {
+        let content = ``;
+        // -- Filtre les tags pour n'en garder qu'un de chaque
+        // -- Sépare les tags du tableau pour les afficher un par un
+        for(let i = 0; i < listTags.length; i++) {
+            content += `<a class="filter" id="${listTags[i]}" href="#" title="#${listTags[i]}">#${listTags[i]}</a>`;
+        }
+
+        return content
+    }
+
+    initClickOnTag(listTags) {
+        for(let i = 0; i < listTags.length; i++) {
+            let mainTag = document.getElementById(`${listTags[i]}`);
+            mainTag.addEventListener("click", function() {
+                this.renderPhotographerByTag(mainTag.id)
+            }.bind(this))
+        }
+    }
+
+    renderPhotographerByTag(tagId) {
+        let baliseListPhotographer = document.getElementById("list__photographers");
+        let content = ``
+        for(let i = 0; i < this.listPhotographer.length; i++) {
+            let currentPhotographer = this.listPhotographer[i];
+            if(currentPhotographer.tags.includes(tagId)) {
+                content += `<div id="photographer__profile">` + this.renderDetailPhotographer(currentPhotographer) + this.renderTagsPhotographersList(currentPhotographer, this.listTags) + `</div>`;
+            }
+        }
+        baliseListPhotographer.innerHTML = content
     }
 
     renderTagsPhotographersList(listPhotographer) {
@@ -43,8 +73,8 @@ class ViewMainPage extends AbstractView {
     }
 
     renderDetailPhotographer(currentPhotographer) {
-        let content = `
-            <a class="photographer__link" href="#" onclick="goToRoute('photographerPage', ${currentPhotographer.id})" title="Profil de ${currentPhotographer.name}">
+        let content = 
+            `<a class="photographer__link" href="#" onclick="goToRoute('photographerPage', ${currentPhotographer.id})" title="Profil de ${currentPhotographer.name}">
                 <img class="photographer__portrait" src="Images/Photographers ID Photos/${currentPhotographer.portrait}">
                 <h2 class="photographer__name">${currentPhotographer.name}</h2>
             </a>
@@ -52,8 +82,7 @@ class ViewMainPage extends AbstractView {
                 <p class="photographer__city">${currentPhotographer.city}, ${currentPhotographer.country}</p>
                 <p class="photographer__tagline">${currentPhotographer.tagline}</p>
                 <p class="photographer__price">${currentPhotographer.price}€/jour</p>
-            </div>
-            `;
+            </div>`;
 
         return content;
     }

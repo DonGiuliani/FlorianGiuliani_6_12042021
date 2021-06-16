@@ -1,6 +1,6 @@
 class Model {
 
-    static getPhotographer() {
+    static getPhotographers() {
         return jsonData.photographers;
     }
 
@@ -14,8 +14,17 @@ class Model {
         return null;
     }
 
-    static getAllMedia() {
-        return jsonData.media;
+    static getAllTags() {
+        let arrayTags = [];
+        // -- Stock tous les tags dans un tableau
+        for(let i = 0; i < jsonData.photographers.length; i++) {
+            let tags = jsonData.photographers[i].tags;
+            for(let tag of tags) {
+                arrayTags.push(tag);
+            }
+        }
+        let arrayTagsFiltered = [...new Set(arrayTags)];
+        return arrayTagsFiltered
     }
 
     static getAllMediaByPhotographerId(id) {
@@ -27,17 +36,5 @@ class Model {
             }
         }
         return arrayMedia;
-    }
-
-    static getOneMediaById(mediaId) {
-        console.log(mediaId);
-        for(let i = 0; i < jsonData.media.length; i++) {
-            let currentMediaId = jsonData.media[i].id;
-            if(mediaId == currentMediaId) {
-                console.log(jsonData.media[i].id);
-
-            }
-
-        }
     }
 }

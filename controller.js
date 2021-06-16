@@ -2,7 +2,9 @@ class Controller {
 
     renderMainPage() {
         let view = new ViewMainPage();
-        view.renderPhotographersList(Model.getPhotographer());
+        let photographers = Model.getPhotographers();
+        let listTags = Model.getAllTags();
+        view.renderPhotographersList(photographers, listTags);
     }
 
     renderPhotographerPage(id) {
@@ -14,6 +16,6 @@ class Controller {
 
     renderModal() {
         let view = new ViewModal();
-        view.renderModal(Model.getPhotographer());
+        view.renderModal(Model.getPhotographers());
     }
 }

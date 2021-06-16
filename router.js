@@ -11,11 +11,7 @@ function goToRoute(page, ...arguments) {
             let photographerId = arguments[0]
             controller.renderPhotographerPage(photographerId)
             break;
-
-        case "modalPage":
-            controller.renderModal()
-            break;
-        
+            
         default : 
         //controller.renderErrorPage
     }
