@@ -24,7 +24,7 @@ class Model {
             }
         }
         let arrayTagsFiltered = [...new Set(arrayTags)];
-        return arrayTagsFiltered
+        return arrayTagsFiltered;
     }
 
     static getAllMediaByPhotographerId(id) {

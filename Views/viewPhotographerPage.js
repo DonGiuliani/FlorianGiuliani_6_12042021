@@ -4,6 +4,7 @@ class ViewPhotographerPage extends AbstractView {
         this.listMedia = listMedia;
         this.photographer = photographer;
         let content = ``;
+        console.log(photographer);
         
         content += this.renderSlider(photographer, listMedia);
         content += this.renderModal(photographer)
@@ -15,8 +16,11 @@ class ViewPhotographerPage extends AbstractView {
             </a>
         </div>
         <button class="button" id="button__contact">Contactez-moi</button>
+        <div id="likes__count">
+            <p>${this.countTotalLikes(listMedia)} <i class="fas fa-heart"></i></p>
+            <p>${photographer.price}€ / jour</p>
+        </div>
         `;
-
       
         content += this.renderDetailPhotographerPage(photographer) + this.renderTagsPhotographer(photographer);
 
@@ -44,6 +48,14 @@ class ViewPhotographerPage extends AbstractView {
         return content;
     }
 
+    countTotalLikes(listMedia) {
+        let total = 0;
+        for(let i = 0; i < listMedia.length; i++) {
+            total += listMedia[i].likes
+        }
+        return total;
+    }
+
     renderTagsPhotographer(listPhotographer) {
         let content = `<div id="photographer__tags--biography">`;
         for(let i = 0; i < listPhotographer.tags.length; i++) {
@@ -52,8 +64,8 @@ class ViewPhotographerPage extends AbstractView {
                 content += `<a class="filter photographer__tag" href="#" title="#${tag}">#${tag}</a>`;
             }
 
-            content += `</div>`
-            return content
+            content += `</div>`;
+            return content;
         }
     }
 
@@ -62,27 +74,17 @@ class ViewPhotographerPage extends AbstractView {
         <div id="photographer__pictures__bloc">
             <nav class="sort">Trier par 
                 <ul>
-                    <li class="sorting roll">
-                        <span id="label__tri">Popularité</span>
+                    <li class="sorting">
+                        <span id="label__tri">Popularité <i class="fas fa-chevron-down"></i></span>
                         <ul class="deroulement">
-                            <li class="sorting roll" id="sort__popularity">Popularité
-                            <li class="sorting roll" id="sort__date">Date</li>
-                            <li class="sorting roll" id="sort__title">Titre</li>
+                            <li class="roll" id="sort__popularity">Popularité</li>
+                            <li class="roll" id="sort__date">Date</li>
+                            <li class="roll" id="sort__title">Titre</li>
                         </ul>
                     </li>
                 </ul>
             </nav>
-            `
-            /*`
-        <div id="photographer__pictures__bloc">
-            <nav class="sort">Trier par
-                <ul>
-                    <li class="sorting roll" id="sort__popularity">Popularité
-                    <li class="sorting roll" id="sort__date">Date</li>
-                    <li class="sorting roll" id="sort__title">Titre</li>
-                </ul>
-            </nav>
-            `*/;
+            `;
 
         for(let i = 0; i < listMedia.length; i++) {
             if(listMedia[i].image !== undefined) {
@@ -96,8 +98,9 @@ class ViewPhotographerPage extends AbstractView {
                             <i class="fas fa-heart" id="like__image__${listMedia[i].id}"></i>
                         </p>
                     </div>
-                </div>`
-            } else {
+                </div>`;
+            } 
+            else {
                 let titleVideo = listMedia[i].video.replace(".mp4", "").replaceAll("_", " ");
 
                 content += `
@@ -111,24 +114,38 @@ class ViewPhotographerPage extends AbstractView {
                             <i class="fas fa-heart" id="like__image__${listMedia[i].id}"></i>
                         </p>
                     </div>
-                 </div>`
+                 </div>`;
             }
         }
-        content += ` </div>`
-        return content
+        content += ` </div>`;
+        return content;
     }
 
     addEventListenerOnLikeButton(listMedia) {
         for(let i = 0; i < listMedia.length; i++) {
 
             let likeButton = document.getElementById(`like__image__${listMedia[i].id}`);
+            likeButton.setAttribute("checked", "false");
+
             let likeNumber = document.getElementById(`like__number__image__${listMedia[i].id}`);
-            likeButton.addEventListener("click", function(event) {
-                console.log(event.target);
-                let likes = listMedia[i].likes;
-                likes++
-                likeNumber.innerHTML = likes + ` <i class="fas fa-heart"></i>`
-            })
+            let likes = listMedia[i].likes;
+
+            if(likeButton.getAttribute("checked") == "false") {
+                likeButton.addEventListener("click", function() {
+                    likes++;
+                    likeNumber.innerHTML = likes + ` <i class="fas fa-heart"></i>`;
+                    likeButton.setAttribute("checked", "true");
+                    console.log(likeButton);
+                });
+            } 
+            else if(likeButton.getAttribute("checked") == "true") {
+                likeButton.addEventListener("click", function() {
+                    likes--;
+                    likeNumber.innerHTML = likes + ` <i class="fas fa-heart"></i>`;
+                    likeButton.setAttribute("checked", "false");
+                    console.log(likeButton);
+                });
+            }
         }
     }
 
@@ -178,7 +195,7 @@ class ViewPhotographerPage extends AbstractView {
         let content = `<div id="slider">
         <i class="fas fa-times" id="cross__slider"></i>
         <i class="fas fa-chevron-left" id="arrow__left"></i>
-        `
+        `;
 
         for(let i = 0; i < listMedia.length; i++) {
             if(listMedia[i].image !== undefined) {
@@ -190,14 +207,14 @@ class ViewPhotographerPage extends AbstractView {
                 <video controls class="image__slider" id="image_slider__${listMedia[i].id}" aria-label="image closeup view">
                 <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
                 </video>
-                `
+                `;
             }
         }
 
         content += `
         <i class="fas fa-chevron-right" id="arrow__right"></i>
         </div>
-       `
+       `;
 
         return content
     }
@@ -257,14 +274,36 @@ class ViewPhotographerPage extends AbstractView {
             let currentMedia = this.listMedia[i];
             arrayMediaTitle.push(currentMedia);
         }
-        arrayMediaTitle.sort(function (a, b) {
-            return a.image.localeCompare(b.image);
-        });
 
+        let arrayTitleString = [];
+
+        for(let i = 0; i < listMedia.length; i++) {
+            let titleImageString = listMedia[i].image;
+            let titleVideoString = listMedia[i].video;
+
+            if(listMedia[i].image !== undefined) {
+                arrayTitleString.push(titleImageString);
+            } else {
+                arrayTitleString.push(titleVideoString);
+            }
+        }
+
+        /*arrayMediaTitle.sort(function (a, b) {
+            return a.arrayTitleString[i].localeCompare(b.arrayTitleString[i]);
+        });*/
+
+        for(let i = 0; i < arrayTitleString.length; i++) {
+            console.log(arrayTitleString[i]);
+        }
+
+        console.log(arrayTitleString);
         console.log(arrayMediaTitle);
 
         content += this.renderPhotographerPage(photographer, arrayMediaTitle);
         baliseListMedia.innerHTML = content;
+
+        let sortingSubtitle = document.getElementById("label__tri");
+        sortingSubtitle.innerHTML = `Titre <i class="fas fa-chevron-down"></i>`
     }
 
     sortImagesByPopularity(photographer, listMedia) {
@@ -304,6 +343,9 @@ class ViewPhotographerPage extends AbstractView {
         console.log(arrayMediaDate);
         content += this.renderPhotographerPage(photographer, arrayMediaDate)
         baliseListMedia.innerHTML = content;
+
+        let sortingSubtitle = document.getElementById("label__tri");
+        sortingSubtitle.innerHTML = `Date <i class="fas fa-chevron-down"></i>`;
     }
 
     addModalOnImage() {
@@ -359,7 +401,7 @@ class ViewPhotographerPage extends AbstractView {
 
                 <div class="modal__field">
                     <label class="modal__label" for="message">Votre message</label>
-                    <input class="modal__input message" id="message" type="text"/>
+                    <textarea class="modal__input message" id="message" type="text"></textarea>
                 </div>
 
                 <div class="modal__submit">
@@ -367,7 +409,7 @@ class ViewPhotographerPage extends AbstractView {
                 </div>
             </form>
         </div>
-        `
+        `;
         return content;
     }
 

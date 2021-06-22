@@ -16,12 +16,12 @@ class ViewMainPage extends AbstractView {
             </nav>
         </header>`;
 
-        content += `<div id="list__photographers">`
+        content += `<div id="list__photographers">`;
 
         for(let i = 0; i < listPhotographer.length; i++) {
             content += `<div id="photographer__profile">` + this.renderDetailPhotographer(listPhotographer[i]) + this.renderTagsPhotographersList(listPhotographer[i], listTags) + `</div>`;
         }
-        content += `</div>`
+        content += `</div>`;
 
         this.display(content);
         this.initClickOnTag(listTags);
@@ -33,9 +33,9 @@ class ViewMainPage extends AbstractView {
         // -- Sépare les tags du tableau pour les afficher un par un
         for(let i = 0; i < listTags.length; i++) {
             content += `<a class="filter" id="${listTags[i]}" href="#" title="#${listTags[i]}">#${listTags[i]}</a>`;
-        }
+        };
 
-        return content
+        return content;
     }
 
     initClickOnTag(listTags) {
@@ -43,20 +43,20 @@ class ViewMainPage extends AbstractView {
             let mainTag = document.getElementById(`${listTags[i]}`);
             mainTag.addEventListener("click", function() {
                 this.renderPhotographerByTag(mainTag.id)
-            }.bind(this))
+            }.bind(this));
         }
     }
 
     renderPhotographerByTag(tagId) {
         let baliseListPhotographer = document.getElementById("list__photographers");
-        let content = ``
+        let content = ``;
         for(let i = 0; i < this.listPhotographer.length; i++) {
             let currentPhotographer = this.listPhotographer[i];
             if(currentPhotographer.tags.includes(tagId)) {
                 content += `<div id="photographer__profile">` + this.renderDetailPhotographer(currentPhotographer) + this.renderTagsPhotographersList(currentPhotographer, this.listTags) + `</div>`;
             }
         }
-        baliseListPhotographer.innerHTML = content
+        baliseListPhotographer.innerHTML = content;
     }
 
     renderTagsPhotographersList(listPhotographer) {
@@ -68,7 +68,7 @@ class ViewMainPage extends AbstractView {
             }
 
             content += `</div>`;
-            return content
+            return content;
         }
     }
 
