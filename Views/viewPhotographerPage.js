@@ -4,7 +4,6 @@ class ViewPhotographerPage extends AbstractView {
         this.listMedia = listMedia;
         this.photographer = photographer;
         let content = ``;
-        console.log(photographer);
         
         content += this.renderSlider(photographer, listMedia);
         content += this.renderModal(photographer)
@@ -37,7 +36,7 @@ class ViewPhotographerPage extends AbstractView {
         let content = `
         <div id="photographer__biography">
             <div id="photographer__details">
-                <h1 class="photographer__name biography">${currentPhotographer.name}</h1>
+                <h1 class="photographer__name biography__name">${currentPhotographer.name}</h1>
                 <p class="photographer__city biography">${currentPhotographer.city}, ${currentPhotographer.country}</p>
                 <p class="photographer__tagline biography">${currentPhotographer.tagline}</p>
             </div>
