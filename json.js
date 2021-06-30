@@ -156,28 +156,10 @@ let jsonData = {
       {
         "id": 73852953,
         "photographerId": 925,
-        "image": "Sport_2000_with_8.jpg",
+        "image": "Sport_Butterfly.jpg",
         "tags": ["sport"],
         "likes": 52,
         "date": "2013-02-30",
-        "price": 70
-      },
-      {
-        "id": 92758372,
-        "photographerId": 925,
-        "image": "Fashion_Wings.jpg",
-        "tags": ["fashion"],
-        "likes": 58,
-        "date": "2018-07-17",
-        "price": 70
-      },
-      {
-        "id": 32958383,
-        "photographerId": 925,
-        "image": "Fashion_Melody_Red_on_Stripes.jpg",
-        "tags": ["fashion"],
-        "likes": 11,
-        "date": "2019-08-12",
         "price": 70
       },
       {

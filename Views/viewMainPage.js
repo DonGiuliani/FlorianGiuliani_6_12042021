@@ -75,7 +75,7 @@ class ViewMainPage extends AbstractView {
     renderDetailPhotographer(currentPhotographer) {
         let content = 
             `<a class="photographer__link" href="#" onclick="goToRoute('photographerPage', ${currentPhotographer.id})" title="Profil de ${currentPhotographer.name}">
-                <img class="photographer__portrait" src="Images/Photographers ID Photos/${currentPhotographer.portrait}">
+                <img class="photographer__portrait" src="Images/Photographers ID Photos/${currentPhotographer.portrait}" aria-label="Profil de ${currentPhotographer.name}">
                 <h2 class="photographer__name">${currentPhotographer.name}</h2>
             </a>
             <div id="photographer__text">

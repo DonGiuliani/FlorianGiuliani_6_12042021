@@ -10,14 +10,19 @@ class ViewPhotographerPage extends AbstractView {
 
         content += `
         <div id="header__section">
-            <a id="logo" href="#">
+            <a id="logo" href="#" aria-label="Page d'acceuil">
                 <img id="logo__img" src="Images/fisheye-logo.png" title="Logo de FishEye" alt="logo fisheye" onclick="goToRoute('viewMainPage')"/>
             </a>
         </div>
-        <button class="button" id="button__contact">Contactez-moi</button>
-        <div id="likes__count">
-            <p>${this.countTotalLikes(listMedia)} <i class="fas fa-heart"></i></p>
-            <p>${photographer.price}€ / jour</p>
+        <button class="button" id="button__contact" aria-label="Contacter photographe">Contactez-moi</button>
+        <div id="likes__count" aria-label="Bouton like">
+            <p>
+                <span id="total__like">${this.countTotalLikes(listMedia)}</span>
+                <i class="fas fa-heart"></i>
+            </p>
+            <p>
+                ${photographer.price}€ / jour
+            </p>
         </div>
         `;
       
@@ -34,7 +39,7 @@ class ViewPhotographerPage extends AbstractView {
     
     renderDetailPhotographerPage(currentPhotographer) {
         let content = `
-        <div id="photographer__biography">
+        <div id="photographer__biography" aria-label="Biographie photographe">
             <div id="photographer__details">
                 <h1 class="photographer__name biography__name">${currentPhotographer.name}</h1>
                 <p class="photographer__city biography">${currentPhotographer.city}, ${currentPhotographer.country}</p>
@@ -47,20 +52,12 @@ class ViewPhotographerPage extends AbstractView {
         return content;
     }
 
-    countTotalLikes(listMedia) {
-        let total = 0;
-        for(let i = 0; i < listMedia.length; i++) {
-            total += listMedia[i].likes
-        }
-        return total;
-    }
-
     renderTagsPhotographer(listPhotographer) {
         let content = `<div id="photographer__tags--biography">`;
         for(let i = 0; i < listPhotographer.tags.length; i++) {
             let tags = listPhotographer.tags;
             for(let tag of tags) {
-                content += `<a class="filter photographer__tag" href="#" title="#${tag}">#${tag}</a>`;
+                content += `<a class="filter photographer__tag" href="#" title="#${tag}" aria-label="Filtre">#${tag}</a>`;
             }
 
             content += `</div>`;
@@ -71,14 +68,14 @@ class ViewPhotographerPage extends AbstractView {
     renderPhotographerImages(currentPhotographer, listMedia) {
         let content = `
         <div id="photographer__pictures__bloc">
-            <nav class="sort">Trier par 
+            <nav class="sort" aria-label="Tri">Trier par 
                 <ul>
                     <li class="sorting">
                         <span id="label__tri">Popularité <i class="fas fa-chevron-down"></i></span>
                         <ul class="deroulement">
-                            <li class="roll" id="sort__popularity">Popularité</li>
-                            <li class="roll" id="sort__date">Date</li>
-                            <li class="roll" id="sort__title">Titre</li>
+                            <li class="roll" id="sort__popularity" aria-label="Tri popularité">Popularité</li>
+                            <li class="roll" id="sort__date" aria-label="Tri date">Date</li>
+                            <li class="roll" id="sort__title" aria-label="Tri titre">Titre</li>
                         </ul>
                     </li>
                 </ul>
@@ -90,11 +87,12 @@ class ViewPhotographerPage extends AbstractView {
                 let titleImage = listMedia[i].image.replace(".jpg", "").replaceAll("_", " ");
                 content += `
                 <div class="photo">
-                    <img class="photographer__picture" id="image__${listMedia[i].id}" src="Images/${currentPhotographer.name}/${listMedia[i].image}" aria-label="image closeup view">
+                    <img class="photographer__picture" id="image__${listMedia[i].id}" src="Images/${currentPhotographer.name}/${listMedia[i].image}" aria-label="Agrandir image">
                     <div class="picture__details">
                         <p class="picture__title">${titleImage}</p>
-                        <p class="picture__likes" aria-label="likes" id="like__number__image__${listMedia[i].id}">${listMedia[i].likes}
-                            <i class="fas fa-heart" id="like__image__${listMedia[i].id}"></i>
+                        <p class="picture__likes">
+                            <span id="nb_like__image__${listMedia[i].id}">${listMedia[i].likes}</span>
+                            <i class="fas fa-heart like" id="like__image__${listMedia[i].id}" aria-label="liker"></i>
                         </p>
                     </div>
                 </div>`;
@@ -104,13 +102,14 @@ class ViewPhotographerPage extends AbstractView {
 
                 content += `
                 <div class="photo">
-                    <video controls class="photographer__picture" aria-label="image closeup view">
+                    <video controls class="photographer__picture" aria-label="Agrandir image">
                         <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
                     </video>
                     <div class="picture__details">
                         <p class="picture__title">${titleVideo}</p>
-                        <p class="picture__likes" aria-label="likes" id="like__number__image__${listMedia[i].id}">${listMedia[i].likes}
-                            <i class="fas fa-heart" id="like__image__${listMedia[i].id}"></i>
+                        <p class="picture__likes" aria-label="likes">
+                            <span id="nb_like__image__${listMedia[i].id}">${listMedia[i].likes}</span>
+                            <i class="fas fa-heart like" id="like__image__${listMedia[i].id}"></i>
                         </p>
                     </div>
                  </div>`;
@@ -121,31 +120,44 @@ class ViewPhotographerPage extends AbstractView {
     }
 
     addEventListenerOnLikeButton(listMedia) {
+        let totalLikes = this.countTotalLikes(listMedia);
+
         for(let i = 0; i < listMedia.length; i++) {
 
             let likeButton = document.getElementById(`like__image__${listMedia[i].id}`);
             likeButton.setAttribute("checked", "false");
 
-            let likeNumber = document.getElementById(`like__number__image__${listMedia[i].id}`);
             let likes = listMedia[i].likes;
+            let countTotalLikes = document.getElementById("total__like")
 
-            if(likeButton.getAttribute("checked") == "false") {
-                likeButton.addEventListener("click", function() {
+            likeButton.addEventListener("click", function(event) {
+                let currentButton = event.target;
+                let idNbLikeTag = "nb_" + currentButton.id;
+
+                if(currentButton.getAttribute("checked") == "false") {
                     likes++;
-                    likeNumber.innerHTML = likes + ` <i class="fas fa-heart"></i>`;
-                    likeButton.setAttribute("checked", "true");
-                    console.log(likeButton);
-                });
-            } 
-            else if(likeButton.getAttribute("checked") == "true") {
-                likeButton.addEventListener("click", function() {
+                    totalLikes++;
+                    document.getElementById(idNbLikeTag).innerHTML = likes;
+                    countTotalLikes.innerHTML = totalLikes;
+                    currentButton.setAttribute("checked", "true");
+                }
+                else if(currentButton.getAttribute("checked") == "true") {
                     likes--;
-                    likeNumber.innerHTML = likes + ` <i class="fas fa-heart"></i>`;
-                    likeButton.setAttribute("checked", "false");
-                    console.log(likeButton);
-                });
-            }
+                    totalLikes--;
+                    document.getElementById(idNbLikeTag).innerHTML = likes;
+                    countTotalLikes.innerHTML = totalLikes;
+                    currentButton.setAttribute("checked", "false");
+                }
+            });
         }
+    }
+    
+    countTotalLikes(listMedia) {
+        let total = 0;
+        for(let i = 0; i < listMedia.length; i++) {
+            total += listMedia[i].likes
+        }
+        return total;
     }
 
     addSliderOnImage(listMedia) {
@@ -174,13 +186,15 @@ class ViewPhotographerPage extends AbstractView {
         this.indexImage = indexImage;
         for(let i = 0; i < listMedia.length; i++) {
             let tagImage = document.getElementById(`image_slider__${listMedia[i].id}`);
+            let titleImage = document.getElementById(`image_title__${listMedia[i].id}`)
             let slider = document.getElementById("slider");
-
             if(indexImage == i) {
                 slider.style.display = "flex";
                 tagImage.classList.add("active");
+                titleImage.classList.add("active");
             } else {
-                tagImage.classList.remove('active');
+                tagImage.classList.remove("active");
+                titleImage.classList.remove("active");
             }
         }
     }
@@ -192,26 +206,36 @@ class ViewPhotographerPage extends AbstractView {
 
     renderSlider(currentPhotographer, listMedia) {
         let content = `<div id="slider">
-        <i class="fas fa-times" id="cross__slider"></i>
-        <i class="fas fa-chevron-left" id="arrow__left"></i>
+        <i class="fas fa-times" id="cross__slider" aria-label="Fermer slider"></i>
+        <i class="fas fa-chevron-left" id="arrow__left" aria-label="Photo précédente"></i>
         `;
 
         for(let i = 0; i < listMedia.length; i++) {
-            if(listMedia[i].image !== undefined) {
+            if(listMedia[i].image !== undefined)  {
+                let titleImage = listMedia[i].image.replace(".jpg", "").replaceAll("_", " ");
+
                 content += `
-                <img class="image__slider" id="image_slider__${listMedia[i].id}" src="images/${currentPhotographer.name}/${listMedia[i].image}">
+                <div id="slider__box">
+                    <img class="image__slider" id="image_slider__${listMedia[i].id}" src="images/${currentPhotographer.name}/${listMedia[i].image}">
+                    <p class="image__title" id="image_title__${listMedia[i].id}">${titleImage}</p>
+                </div>
                 `;
             } else {
+                let titleVideo = listMedia[i].video.replace(".mp4", "").replaceAll("_", " ");
+
                 content += `
-                <video controls class="image__slider" id="image_slider__${listMedia[i].id}" aria-label="image closeup view">
-                <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
-                </video>
+                <div id="slider__box">
+                    <video controls class="image__slider" id="image_slider__${listMedia[i].id}">
+                        <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
+                    </video>
+                    <p class="image__title" id="image_title__${listMedia[i].id}">${titleVideo}</p>
+                </div>
                 `;
             }
         }
 
         content += `
-        <i class="fas fa-chevron-right" id="arrow__right"></i>
+        <i class="fas fa-chevron-right" id="arrow__right" aria-label="Photo suivante"></i>
         </div>
        `;
 
@@ -222,6 +246,9 @@ class ViewPhotographerPage extends AbstractView {
         let tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
         tagImage.classList.remove('active');
 
+        let titleImage = document.getElementById(`image_title__${this.listMedia[this.indexImage].id}`)
+        titleImage.classList.remove('active');
+
         if(this.indexImage < this.listMedia.length - 1) {
             this.indexImage++;
         } else {
@@ -230,11 +257,17 @@ class ViewPhotographerPage extends AbstractView {
 
         tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
         tagImage.classList.add('active');
+
+        titleImage = document.getElementById(`image_title__${this.listMedia[this.indexImage].id}`);
+        titleImage.classList.add('active');
     }
 
     renderPreviousPicture() {
         let tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
         tagImage.classList.remove('active');
+        
+        let titleImage = document.getElementById(`image_title__${this.listMedia[this.indexImage].id}`)
+        titleImage.classList.remove('active');
 
         if(this.indexImage > 0) {
             this.indexImage--;
@@ -243,7 +276,10 @@ class ViewPhotographerPage extends AbstractView {
         }
 
         tagImage = document.getElementById(`image_slider__${this.listMedia[this.indexImage].id}`);
-        tagImage.classList.add('active');        
+        tagImage.classList.add('active');
+
+        titleImage = document.getElementById(`image_title__${this.listMedia[this.indexImage].id}`);
+        titleImage.classList.add('active');        
     }
 
     initSorting(photographer, listMedia) {
@@ -274,29 +310,24 @@ class ViewPhotographerPage extends AbstractView {
             arrayMediaTitle.push(currentMedia);
         }
 
-        let arrayTitleString = [];
-
-        for(let i = 0; i < listMedia.length; i++) {
-            let titleImageString = listMedia[i].image;
-            let titleVideoString = listMedia[i].video;
-
-            if(listMedia[i].image !== undefined) {
-                arrayTitleString.push(titleImageString);
-            } else {
-                arrayTitleString.push(titleVideoString);
+        arrayMediaTitle.sort(function (a, b) {
+            if(a.image !== undefined) {
+                if(b.image !== undefined) {
+                    return a.image.localeCompare(b.image);
+                }
+                else {
+                    return a.image.localeCompare(b.video);
+                }
             }
-        }
-
-        /*arrayMediaTitle.sort(function (a, b) {
-            return a.arrayTitleString[i].localeCompare(b.arrayTitleString[i]);
-        });*/
-
-        for(let i = 0; i < arrayTitleString.length; i++) {
-            console.log(arrayTitleString[i]);
-        }
-
-        console.log(arrayTitleString);
-        console.log(arrayMediaTitle);
+            else {
+                if(b.image !== undefined) {
+                    return a.video.localeCompare(b.image);
+                }
+                else {
+                    return a.video.localeCompare(b.video);
+                }
+            }
+        });
 
         content += this.renderPhotographerPage(photographer, arrayMediaTitle);
         baliseListMedia.innerHTML = content;
@@ -360,7 +391,7 @@ class ViewPhotographerPage extends AbstractView {
 
     showModal() {
         let modal = document.getElementById("modal__page");
-        modal.style.display = "flex";
+        modal.style.display = "flex";        
     }
 
     closeModal() {

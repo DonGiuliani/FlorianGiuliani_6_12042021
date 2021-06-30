@@ -144,6 +144,9 @@ a {
 }
 
 .biography__portrait {
+    border: 0px solid black;
+    box-shadow: 1px 1px 10px 1px#000;
+
     width: 100px;
     height: 100px;
 }
@@ -186,7 +189,7 @@ a {
     margin-right: 1.2em;
 }
 
-.fa-heart {
+.like {
     cursor: pointer;
 }
 
@@ -211,7 +214,7 @@ a {
 
 
 /*-----------------------------------------------------------------------*/
-/*----------------------------MODAL PAGE---------------------------------*/
+/*----------------------------MODAL -------------------------------------*/
 /*-----------------------------------------------------------------------*/
 
 
@@ -298,7 +301,7 @@ a {
     align-items: center;
     position: fixed;
     background-color: #FFF;
-    z-index: 2;
+    z-index: 3;
     margin-top: -1em;
     width: 100%;
     height: 100%;
@@ -319,17 +322,33 @@ a {
     top: 2em;
 }
 
+.image__title {
+    display: none;
+}
+
+.image__title.active {
+    display: flex;
+    align-self: flex-start;
+    color: #901C1C;
+}
+
 .image__slider {
     display: none;
-    max-width: 75%;
-    max-height: 95%;
+}
+
+.image__slider.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    max-height: 500px;
     border-radius: 4px;
     object-fit: cover
 }
 
-img.active {
+#slider__box {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
   
@@ -339,6 +358,11 @@ img.active {
 
 @media only screen and (min-width:760px) {
 
+
+    /*-----------------------------------------------------------------------*/
+    /*-------------------------PHOTOGRAPHER PAGE-----------------------------*/
+    /*-----------------------------------------------------------------------*/
+    
     #photographer__biography {
         margin: 3em;
         margin-top: 0;
@@ -348,6 +372,7 @@ img.active {
 
     .photographer__tag {
         background-color: #FFF;
+        font-size: 0.9em;
     }
 
     #photographer__tags--biography {
@@ -360,6 +385,7 @@ img.active {
         position: absolute;
         display: flex;
         left: 3em;
+        z-index: 2;
     }
 
     .roll {
@@ -406,7 +432,8 @@ img.active {
     }
 
     .picture__details {
-        margin: -3em 4em 0
+        margin: -3em 4em 0;
+        width: 75%;
     }
 
     .picture__title, .picture__likes {
@@ -420,17 +447,18 @@ img.active {
         justify-content: space-between;
         width: 170px;
         bottom: -5px;
-        right: 100px;
+        right: 40px;
         padding: 1em;
         border-radius: 5px;
         background-color: #D3573C;
+        z-index: 2;
     }
 
-    .image__slider {
-        max-width: 75%;
-        max-height: 85%;
-    }
-    
+    /*-----------------------------------------------------------------------*/
+    /*----------------------------MODAL -------------------------------------*/
+    /*-----------------------------------------------------------------------*/
+
+
     .button__contact {
         position: relative;
         padding: 1em 1em;
@@ -441,6 +469,14 @@ img.active {
     #modal__page {
         width: 50%;
         height: 680px;
+        margin: auto;
+        border: 0px solid black;
+        box-shadow: 1px 1px 10px 1px#000;
+        z-index: 3;
+    }
+
+    .image__slider.active {
+        max-height: 600px;
     }
 }
 
