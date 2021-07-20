@@ -7,13 +7,18 @@ class ViewMainPage extends AbstractView {
         <header>
             <div id="header__section">
                 <a id="logo" href="#">
-                    <img id="logo__img" src="Images/fisheye-logo.png" title="Logo de FishEye" alt="logo fisheye" onclick="goToRoute('viewMainPage')"/>
+                    <img id="logo__img" src="Images/fisheye-logo.png" alt="logo fisheye" title="FishEye" onclick="goToRoute('viewMainPage')" aria-label="Lien Page d'accueil"/>
                 </a>
                 <h1 id="header__title">Nos photographes</h1>
             </div>
-            <nav id="filters" aria-label="photographer categories">` 
+            <nav id="filters" role="navigation" aria-label="categorie photographe">` 
             + this.renderArrayTags(listTags) + `
             </nav>
+            <a href="#header__section">
+                <div id="ancre">
+                        Passer au contenu
+                </div>
+            </a>
         </header>`;
 
         content += `<div id="list__photographers">`;
@@ -25,14 +30,25 @@ class ViewMainPage extends AbstractView {
 
         this.display(content);
         this.initClickOnTag(listTags);
+        this.activateAncre();
+    }
+
+    activateAncre() {
+        let ancre = document.getElementById("ancre");
+        window.addEventListener("scroll", function(e) {
+            if(pageYOffset > 115) {
+                ancre.classList.add("active")
+            } else {
+                ancre.classList.remove("active")
+            }
+        })
     }
 
     renderArrayTags(listTags) {
         let content = ``;
-        // -- Filtre les tags pour n'en garder qu'un de chaque
         // -- Sépare les tags du tableau pour les afficher un par un
         for(let i = 0; i < listTags.length; i++) {
-            content += `<a class="filter" id="${listTags[i]}" href="#" title="#${listTags[i]}">#${listTags[i]}</a>`;
+            content += `<a class="filter" id="${listTags[i]}" href="#" title="#${listTags[i]}" aria-label="filtre hashtag ${listTags[i]}">#${listTags[i]}</a>`;
         };
 
         return content;
@@ -53,7 +69,8 @@ class ViewMainPage extends AbstractView {
         for(let i = 0; i < this.listPhotographer.length; i++) {
             let currentPhotographer = this.listPhotographer[i];
             if(currentPhotographer.tags.includes(tagId)) {
-                content += `<div id="photographer__profile">` + this.renderDetailPhotographer(currentPhotographer) + this.renderTagsPhotographersList(currentPhotographer, this.listTags) + `</div>`;
+                content += `<div id="photographer__profile">` + this.renderDetailPhotographer(currentPhotographer) + this.renderTagsPhotographersList(currentPhotographer, this.listTags)
+                + `</div>`;
             }
         }
         baliseListPhotographer.innerHTML = content;
@@ -64,7 +81,7 @@ class ViewMainPage extends AbstractView {
         for(let i = 0; i < listPhotographer.tags.length; i++) {
             let tags = listPhotographer.tags;
             for(let tag of tags) {
-                content += `<a class="filter photographer__tag" href="#" title="#${tag}">#${tag}</a>`;
+                content += `<a class="filter photographer__tag" href="#" title="#${tag}" aria-label="hashtag ${tag}">#${tag}</a>`;
             }
 
             content += `</div>`;
@@ -74,8 +91,8 @@ class ViewMainPage extends AbstractView {
 
     renderDetailPhotographer(currentPhotographer) {
         let content = 
-            `<a class="photographer__link" href="#" onclick="goToRoute('photographerPage', ${currentPhotographer.id})" title="Profil de ${currentPhotographer.name}">
-                <img class="photographer__portrait" src="Images/Photographers ID Photos/${currentPhotographer.portrait}" aria-label="Profil de ${currentPhotographer.name}">
+            `<a class="photographer__link" href="#" aria-current="photographer page" onclick="goToRoute('photographerPage', ${currentPhotographer.id})" title="Profil de ${currentPhotographer.name}">
+                <img class="photographer__portrait" src="Images/Photographers ID Photos/${currentPhotographer.portrait}" aria-label="portrait de ${currentPhotographer.name}">
                 <h2 class="photographer__name">${currentPhotographer.name}</h2>
             </a>
             <div id="photographer__text">

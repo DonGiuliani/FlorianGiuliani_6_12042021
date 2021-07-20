@@ -10,8 +10,8 @@ class ViewPhotographerPage extends AbstractView {
 
         content += `
         <div id="header__section">
-            <a id="logo" href="#" aria-label="Page d'acceuil">
-                <img id="logo__img" src="Images/fisheye-logo.png" title="Logo de FishEye" alt="logo fisheye" onclick="goToRoute('viewMainPage')"/>
+            <a id="logo" href="#">
+                <img id="logo__img" class="logo__photographer__page" src="Images/fisheye-logo.png" alt="logo fisheye" aria-label="Lien Page d'accueil" onclick="goToRoute('viewMainPage')"/>
             </a>
         </div>
         <button class="button" id="button__contact" aria-label="Contacter photographe">Contactez-moi</button>
@@ -26,7 +26,7 @@ class ViewPhotographerPage extends AbstractView {
         </div>
         `;
       
-        content += this.renderDetailPhotographerPage(photographer) + this.renderTagsPhotographer(photographer);
+        content += this.renderDetailPhotographerPage(photographer);
 
         content += this.renderPhotographerImages(photographer, listMedia);
 
@@ -44,6 +44,7 @@ class ViewPhotographerPage extends AbstractView {
                 <h1 class="photographer__name biography__name">${currentPhotographer.name}</h1>
                 <p class="photographer__city biography">${currentPhotographer.city}, ${currentPhotographer.country}</p>
                 <p class="photographer__tagline biography">${currentPhotographer.tagline}</p>
+                ${this.renderTagsPhotographer(currentPhotographer)}
             </div>
             <img class="photographer__portrait biography__portrait" src="Images/Photographers ID Photos/${currentPhotographer.portrait}">
         </div>
@@ -65,56 +66,87 @@ class ViewPhotographerPage extends AbstractView {
         }
     }
 
+    getMediaContentFactory(currentPhotographer, media) {
+        if(media.image) {
+            let titleImage = media.image.replace(".jpg", "").replaceAll("_", " ");
+
+            let content = `
+            <div class="photo">
+                <a href="#" id="image__${media.id}">
+                    <img class="photographer__picture" src="Images/${currentPhotographer.name}/${media.image}" aria-label="Agrandir image">
+                </a>
+                <div class="picture__details">
+                    <p class="picture__title">${titleImage}</p>
+                    <p class="picture__likes">
+                        <span id="nb_like__image__${media.id}">${media.likes}</span>
+                        <button class="like" aria-label="like">
+                            <i class="fas fa-heart like" id="like__image__${media.id}" aria-label="liker"></i>
+                        </button>
+                    </p>
+                </div>
+            </div>
+                `;
+
+            return content;
+        } else {
+            let titleVideo = media.video.replace(".mp4", "").replaceAll("_", " ");
+
+            let content = `
+            <div class="photo">
+                <video controls class="photographer__picture" aria-label="Agrandir image">
+                    <source src="Images/${currentPhotographer.name}/${media.video}" type="video/mp4">
+                </video>
+                <div class="picture__details">
+                    <p class="picture__title">${titleVideo}</p>
+                    <p class="picture__likes" aria-label="likes">
+                        <span id="nb_like__image__${media.id}">${media.likes}</span>
+                        <button type="button" class="like" aria-label="like">
+                            <i class="fas fa-heart" id="like__image__${media.id}" aria-label="liker"></i>
+                        </button>
+                    </p>
+                </div>
+            </div>`;
+
+            return content;
+        }
+    }
+
     renderPhotographerImages(currentPhotographer, listMedia) {
         let content = `
-        <div id="photographer__pictures__bloc">
-            <nav class="sort" aria-label="Tri">Trier par 
+            <nav id="sort" role="navigation" aria-label="Tri">Trier par 
                 <ul>
                     <li class="sorting">
-                        <span id="label__tri">Popularité <i class="fas fa-chevron-down"></i></span>
-                        <ul class="deroulement">
-                            <li class="roll" id="sort__popularity" aria-label="Tri popularité">Popularité</li>
-                            <li class="roll" id="sort__date" aria-label="Tri date">Date</li>
-                            <li class="roll" id="sort__title" aria-label="Tri titre">Titre</li>
+                        <button id="sort__button">
+                            <span id="label__tri">Popularité <i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <ul id="deroulement">
+                            <button id="sort__button__popularity">
+                                <li class="roll" id="sort__popularity" aria-label="Tri popularité">
+                                    Popularité
+                                </li>
+                            </button>
+                            <button id="sort__button__date">
+                                <li class="roll" id="sort__date" aria-label="Tri date">
+                                    Date
+                                </li>
+                            </button>
+                            <button id="sort__button__title">
+                                <li class="roll" id="sort__title" aria-label="Tri titre">
+                                    Titre
+                                </li>
+                            </button>
                         </ul>
                     </li>
                 </ul>
             </nav>
+
+            <div id="photographer__pictures__bloc">
             `;
 
         for(let i = 0; i < listMedia.length; i++) {
-            if(listMedia[i].image !== undefined) {
-                let titleImage = listMedia[i].image.replace(".jpg", "").replaceAll("_", " ");
-                content += `
-                <div class="photo">
-                    <img class="photographer__picture" id="image__${listMedia[i].id}" src="Images/${currentPhotographer.name}/${listMedia[i].image}" aria-label="Agrandir image">
-                    <div class="picture__details">
-                        <p class="picture__title">${titleImage}</p>
-                        <p class="picture__likes">
-                            <span id="nb_like__image__${listMedia[i].id}">${listMedia[i].likes}</span>
-                            <i class="fas fa-heart like" id="like__image__${listMedia[i].id}" aria-label="liker"></i>
-                        </p>
-                    </div>
-                </div>`;
-            } 
-            else {
-                let titleVideo = listMedia[i].video.replace(".mp4", "").replaceAll("_", " ");
-
-                content += `
-                <div class="photo">
-                    <video controls class="photographer__picture" aria-label="Agrandir image">
-                        <source src="Images/${currentPhotographer.name}/${listMedia[i].video}" type="video/mp4">
-                    </video>
-                    <div class="picture__details">
-                        <p class="picture__title">${titleVideo}</p>
-                        <p class="picture__likes" aria-label="likes">
-                            <span id="nb_like__image__${listMedia[i].id}">${listMedia[i].likes}</span>
-                            <i class="fas fa-heart like" id="like__image__${listMedia[i].id}"></i>
-                        </p>
-                    </div>
-                 </div>`;
-            }
+            content += this.getMediaContentFactory(currentPhotographer, listMedia[i])
         }
+        
         content += ` </div>`;
         return content;
     }
@@ -123,13 +155,12 @@ class ViewPhotographerPage extends AbstractView {
         let totalLikes = this.countTotalLikes(listMedia);
 
         for(let i = 0; i < listMedia.length; i++) {
-
             let likeButton = document.getElementById(`like__image__${listMedia[i].id}`);
             likeButton.setAttribute("checked", "false");
 
             let likes = listMedia[i].likes;
             let countTotalLikes = document.getElementById("total__like")
-
+            
             likeButton.addEventListener("click", function(event) {
                 let currentButton = event.target;
                 let idNbLikeTag = "nb_" + currentButton.id;
@@ -172,14 +203,29 @@ class ViewPhotographerPage extends AbstractView {
         let crossSlider = document.getElementById("cross__slider");
         // Fonction fléchée
         crossSlider.addEventListener("click", () => this.closeSlider());
+        document.addEventListener("keydown", (event) => {
+            if(event.code == "Escape") {
+                this.closeSlider();
+            }
+        })
 
         // -- Show the next picture --
         let arrowRight = document.getElementById("arrow__right");
         arrowRight.addEventListener("click", () => this.renderNextPicture());
+        document.addEventListener("keydown", (event) => {
+            if(event.code == "ArrowRight") {
+                this.renderNextPicture();
+            }
+        })
 
         // -- Show the previous picture --
         let arrowLeft = document.getElementById("arrow__left");
         arrowLeft.addEventListener("click", () => this.renderPreviousPicture());
+        document.addEventListener("keydown", (event) => {
+            if(event.code == "ArrowLeft") {
+                this.renderPreviousPicture();
+            }
+        })
     }
 
     showSlider(indexImage, listMedia) {
@@ -283,20 +329,52 @@ class ViewPhotographerPage extends AbstractView {
     }
 
     initSorting(photographer, listMedia) {
-        let sortButtonTitle = document.getElementById("sort__title");
-        sortButtonTitle.addEventListener("click", function() {
+        let sortButton = document.getElementById("sort__button");
+        sortButton.addEventListener("keydown", (event) => {
+            if(event.code == "Enter") {
+                let deroulement = document.getElementById("deroulement");
+                let labelTri = document.getElementById("label__tri");
+                deroulement.style.display = "flex";
+                deroulement.style.flexDirection = "column"
+                labelTri.style.display = "none"
+            }
+        })
+
+        let sortTitle = document.getElementById("sort__title");
+        sortTitle.addEventListener("click", function() {
             this.sortImagesByTitle(photographer, listMedia)
         }.bind(this));
 
-        let sortButtonPopularity = document.getElementById("sort__popularity");
-        sortButtonPopularity.addEventListener("click", function() {
+        let sortButtonTitle = document.getElementById("sort__button__title");
+        sortButtonTitle.addEventListener("keydown", (event) => {
+            if(event.code == "Enter") {
+                this.sortImagesByTitle(photographer, listMedia)
+            }
+        })
+
+        let sortPopularity = document.getElementById("sort__popularity");
+        sortPopularity.addEventListener("click", function() {
             this.sortImagesByPopularity(photographer, listMedia)
         }.bind(this));
 
-        let sortButtonDate = document.getElementById("sort__date");
-        sortButtonDate.addEventListener("click", function() {
+        let sortButtonPopularity = document.getElementById("sort__button__popularity");
+        sortButtonPopularity.addEventListener("keydown", (event) => {
+            if(event.code == "Enter") {
+                this.sortImagesByPopularity(photographer, listMedia)
+            }
+        })
+
+        let sortDate = document.getElementById("sort__date");
+        sortDate.addEventListener("click", function() {
             this.sortImagesByDate(photographer, listMedia)
         }.bind(this));
+
+        let sortButtonDate = document.getElementById("sort__button__date");
+        sortButtonDate.addEventListener("keydown", (event) => {
+            if(event.code == "Enter") {
+                this.sortImagesByDate(photographer, listMedia)
+            }
+        })
     }
 
     sortImagesByTitle(photographer, listMedia) {
@@ -332,8 +410,8 @@ class ViewPhotographerPage extends AbstractView {
         content += this.renderPhotographerPage(photographer, arrayMediaTitle);
         baliseListMedia.innerHTML = content;
 
-        let sortingSubtitle = document.getElementById("label__tri");
-        sortingSubtitle.innerHTML = `Titre <i class="fas fa-chevron-down"></i>`
+        let labelTri = document.getElementById("label__tri");
+        labelTri.innerHTML = `Titre <i class="fas fa-chevron-down"></i>`
     }
 
     sortImagesByPopularity(photographer, listMedia) {
@@ -350,10 +428,13 @@ class ViewPhotographerPage extends AbstractView {
             return b.likes - a.likes;
         });
 
-
         console.log(arrayMediaLikes);
         content += this.renderPhotographerPage(photographer, arrayMediaLikes)
         baliseListMedia.innerHTML = content;
+
+        let labelTri = document.getElementById("label__tri");
+        labelTri.innerHTML = `Popularité <i class="fas fa-chevron-down"></i>`
+
     }
 
     sortImagesByDate(photographer, listMedia) {
@@ -374,8 +455,9 @@ class ViewPhotographerPage extends AbstractView {
         content += this.renderPhotographerPage(photographer, arrayMediaDate)
         baliseListMedia.innerHTML = content;
 
-        let sortingSubtitle = document.getElementById("label__tri");
-        sortingSubtitle.innerHTML = `Date <i class="fas fa-chevron-down"></i>`;
+        let labelTri = document.getElementById("label__tri");
+        labelTri.innerHTML = `Date <i class="fas fa-chevron-down"></i>`
+
     }
 
     addModalOnImage() {
@@ -384,6 +466,11 @@ class ViewPhotographerPage extends AbstractView {
 
         let crossModal = document.getElementById("cross__modal");
         crossModal.addEventListener("click", this.closeModal);
+        document.addEventListener("keydown", (event) => {
+            if(event.code == "Escape") {
+                this.closeModal();
+            }
+        })
 
         let submitButton = document.getElementById("submit");
         submitButton.addEventListener("click", this.sendInfoModal);
@@ -444,6 +531,11 @@ class ViewPhotographerPage extends AbstractView {
     }
 
     sendInfoModal() {
+        let modal = document.getElementById("modal__page");
+        modal.addEventListener("submit", function(event) {
+            event.preventDefault();
+        })
+
         let firstName = document.getElementById("firstName");
         console.log("Prénom : '" + firstName.value + "'");
 

@@ -58,6 +58,10 @@ a {
     color: #fff;
 }
 
+#ancre {
+    display: none;
+}
+
 /*-----------------------------------------------------------------------*/
 /*----------------------------PHOTOGRAPHERS LIST-------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -134,9 +138,7 @@ a {
 }
 
 #photographer__tags--biography {
-    margin-left: 1em;
-    margin-bottom: 3em;
-    margin-top: -3em;
+    width: 1em;
 }
 
 .photographer__tag {
@@ -146,11 +148,9 @@ a {
 .biography__portrait {
     border: 0px solid black;
     box-shadow: 1px 1px 10px 1px#000;
-
     width: 100px;
     height: 100px;
 }
-
 
 .biography {
     margin-left: 0;
@@ -160,10 +160,10 @@ a {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 2em;
+    margin-bottom: 90px;
 }
 
-.sort, #likes__count {
+#sort, #likes__count {
     display: none;
 }
 
@@ -190,6 +190,9 @@ a {
 }
 
 .like {
+    color: #901C1C;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
 }
 
@@ -358,10 +361,33 @@ a {
 
 @media only screen and (min-width:760px) {
 
-
     /*-----------------------------------------------------------------------*/
     /*-------------------------PHOTOGRAPHER PAGE-----------------------------*/
     /*-----------------------------------------------------------------------*/
+  
+    .logo__photographer__page {
+        margin-bottom: -2em;
+    }
+
+    #ancre {
+        display: none;
+    }
+    
+    #ancre.active {
+        display: block;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 50px;
+        border-radius: 5px;
+        background-color: #D3573C;
+        padding: 0.5em;
+        color: #000;
+    }
+
+    #photographer__pictures__bloc {
+        margin-bottom: 0;
+    }
     
     #photographer__biography {
         margin: 3em;
@@ -370,26 +396,33 @@ a {
         background-color: #FAFAFA;
     }
 
+    .photographer__name {
+        font-size: 3em;
+    }
+
     .photographer__tag {
         background-color: #FFF;
         font-size: 0.9em;
     }
-
-    #photographer__tags--biography {
-        margin-left: 3.5em;
-        margin-bottom: 3em;
-        margin-top: -6em;
-    }
     
-    .sort {
+    #sort {
         position: absolute;
         display: flex;
         left: 3em;
         z-index: 2;
     }
 
+    #sort__button, #sort__button__title, #sort__button__date, #sort__button__popularity {
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
     .roll {
         list-style-type: none;
+        margin-left: 0;
     }
 
     .sorting {
@@ -411,34 +444,33 @@ a {
     #sort__date, #sort__title {
         border-top: 1px solid #FFF;
         padding: 0.4em 0;
+        text-align: left;
     }
 
-    .deroulement {
+    #deroulement {
         display: none;
     }
 
-    nav > ul li:hover .deroulement {
-        display: block;
+    nav > ul li:hover #deroulement {
+        display: flex;
+        flex-direction: column;
     }
 
     nav > ul li:hover span {
         display: none;
     }
+
+    .photo {
+        margin: 3em;
+    }
     
     .photographer__picture {
         height: 340px;
         width: 340px;
-        margin: 4em;
-    }
-
-    .picture__details {
-        margin: -3em 4em 0;
-        width: 75%;
     }
 
     .picture__title, .picture__likes {
         color: #901C1C;
-        margin: 0;
     }
     
     #likes__count {
@@ -459,11 +491,10 @@ a {
     /*-----------------------------------------------------------------------*/
 
 
-    .button__contact {
+    #button__contact {
         position: relative;
         padding: 1em 1em;
-        top: 2.5em;
-        left: 45%;
+        top: 80px;
     }
 
     #modal__page {
@@ -475,6 +506,19 @@ a {
         z-index: 3;
     }
 
+    .button__submit {
+        padding: 1em 2.5em;
+    }
+
+    .modal__submit {
+        justify-content: inherit;
+        margin: 0;
+    }
+
+/*-----------------------------------------------------------------------*/
+/*----------------------------SLIDER PAGE------------------------------*/
+/*-----------------------------------------------------------------------*/
+        
     .image__slider.active {
         max-height: 600px;
     }

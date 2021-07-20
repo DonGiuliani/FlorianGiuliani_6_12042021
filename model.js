@@ -23,6 +23,7 @@ class Model {
                 arrayTags.push(tag);
             }
         }
+        // -- Filtre les tags pour n'en garder qu'un de chaque
         let arrayTagsFiltered = [...new Set(arrayTags)];
         return arrayTagsFiltered;
     }
